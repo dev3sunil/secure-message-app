@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Message Encrypt/Decrypt</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .result {
+      background: #e9ecef;
+      padding: 10px;
+      border-radius: 5px;
+      word-wrap: break-word;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔒 Secure Message Encrypt/Decrypt</h1>
+
+    <label>Enter Message:</label>
+    <textarea id="message" rows="4" placeholder="Type your secret message..."></textarea>
+
+    <label>Secret Key (Keep it safe!):</label>
+    <input type="text" id="key" placeholder="Enter a strong secret key">
+
+    <button onclick="encryptMessage()">Encrypt</button>
+    <button onclick="decryptMessage()">Decrypt</button>
+
+    <h3>🔐 Encrypted Message:</h3>
+    <div class="result" id="encryptedMessage"></div>
+
+    <h3>🔓 Decrypted Message:</h3>
+    <div class="result" id="decryptedMessage"></div>
+  </div>
+
+  <script>
+    function encryptMessage() {
+      const message = document.getElementById("message").value;
+      const key = document.getElementById("key").value;
+
+      if (!message || !key) {
+        alert("Please enter both message and key.");
+        return;
+      }
+
+      const encrypted = CryptoJS.AES.encrypt(message, key).toString();
+      document.getElementById("encryptedMessage").innerText = encrypted;
+    }
+
+    function decryptMessage() {
+      const encrypted = document.getElementById("encryptedMessage").innerText;
+      const key = document.getElementById("key").value;
+
+      if (!encrypted || !key) {
+        alert("Please encrypt a message and enter the correct key.");
+        return;
+      }
+
+      try {
+        const decrypted = CryptoJS.AES.decrypt(encrypted, key);
+        const originalText = decrypted.toString(CryptoJS.enc.Utf8);
+
+        if (!originalText) {
+          alert("Incorrect key or invalid encrypted message.");
+        } else {
+          document.getElementById("decryptedMessage").innerText = originalText;
+        }
+      } catch (e) {
+        alert("Decryption failed. Possible wrong key.");
+      }
+    }
+  </script>
+
+</body>
+</html>
